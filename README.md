@@ -6,6 +6,7 @@ Code fourni dans le cadre du module de C en Linux de Mr Malinge à IPI Lyon
 
 - [Exercice 1](#exercice-1)
 - [Exercice 2](#exercice-2)
+- [Exercice de fin de module](#exercices-de-fin-de-module)
 
 <hr>
 
@@ -83,5 +84,24 @@ make pere && ./pere
 
 ![img.png](Screenshots/Exercice2.png)
 
+
+<hr>
+
+### pere_fils_with_arg
+
+J'en ai profité pour ajouter un exercice à faire en temps de classe, qui traite sur les forks avec des arguments.
+
+##### *Build :*
+
+Lancer le code avec la commande suivante dans le repertoire de l'exercice pere_fils_with_arg, en adaptant le nombre de fork.
+```bash
+make pere_fils_with_arg && ./pere_fils_with_arg 7
+```
+
+  - Génère un nombre de fork égal à l'argument passé en paramètre. 
+  - Chaque fils affiche son pid et celui du père.
+  - Le père attend la mort de tous ses fils avant de se terminer.
+
+  ![img.png](Screenshots/pere_fils_with_arg.png)
 
 
