@@ -46,21 +46,18 @@ void trait_signal_sigusr1() {
     int status_fils;
     /* Premier signal SIGUSR1 */
     if (step == 0) {
-        step++;
         pid_fils = fork();
 
         /* Reception du 1er signal SIGUSER1 qui */
-        printf("P: interception du signal SIGUSR1\n");
-        printf("P: Lancement du fils...\n");
         if (pid_fils == 0) {
             /* si processus fils */
+            printf("P: interception du signal SIGUSR1\n");
+            printf("P: Lancement du fils...\n");
             execl("./fils", "fils", NULL);
         }
         if (pid_fils > 0) {
             /* si processus père */
-            printf("P: Signal SIGUSR1 reçu du fils\n");
-            printf("P: Envoi de SIGUSR1 au fils de pid %d\n", pid_fils);
-            kill(pid_fils, SIGUSR1); /* Envoi du signal SIGUSR1 au fils */
+            step++;
         }
         /* Deuxième signal SIGUSR1 */
     } else if (step == 1) {
@@ -73,6 +70,8 @@ void trait_signal_sigusr1() {
 }
 
 int main() {
+    printf("\n");
+
     signal(SIGUSR1, trait_signal_sigusr1);
 
     /* Vérification de l'existence du fichier fils et compilation */
