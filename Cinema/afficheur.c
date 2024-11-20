@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
-#include <time.h>
 
 /******************************************************************************/
 /*
@@ -10,11 +9,8 @@
 */
 /******************************************************************************/
 extern void attente_aleatoire();
-
-extern int *attacher_segment_memoire();
-
+extern int * attacher_segment_memoire();
 extern int P();
-
 extern int V();
 
 /******************************************************************************/
@@ -23,21 +19,22 @@ extern int V();
 */
 /******************************************************************************/
 
-bool entree_client(int *mem, int semid, int nb_places_a_acheter) {
-    bool place_attribuee = false;
+bool entree_client(int *mem, int semid) {
+    bool place_attribuee=false;
 
     /* On protège l'accès à la shm */
     P(semid);
 
     /* Reste-t-il des places libres ? */
-    if (*mem < nb_places_a_acheter) {
+    if (*mem == 0) {
         /* No more */
-        printf("Pas assez de places disponibles. Il reste %d places.\n", *mem);
-    } else {
+        printf("Il reste %d places pour le film %d\n", *mem, );
+    }
+    else {
         /* On écrit dans la shm */
-        *mem = (*mem - nb_places_a_acheter);
-        printf("Il reste %d places pour le film après un achat de %d places \n", *mem, nb_places_a_acheter);
-        place_attribuee = true;
+        *mem=(*mem - 1);
+        printf("Dans la shm il y a %d places\n", *mem);
+        place_attribuee=true;
     }
 
     /* On protège l'accès à la shm */
@@ -54,10 +51,10 @@ bool entree_client(int *mem, int semid, int nb_places_a_acheter) {
 /******************************************************************************/
 int main(int argc, char *argv[]) {
 
-    unsigned int delais = (rand() % 3) + 1;
+    unsigned int  delais=3;
 
-    int shmid = atoi(argv[1]);
-    int semid = atoi(argv[2]);
+    int shmid=atoi(argv[1]);
+    int semid=atoi(argv[2]);
 
     int *mem;
 
@@ -66,18 +63,15 @@ int main(int argc, char *argv[]) {
     */
 
     /* Attachement du segment de mémoire partagée */
-    mem = attacher_segment_memoire(mem, &shmid);
+    mem=attacher_segment_memoire(mem, &shmid);
 
     while (1) {
         attente_aleatoire(delais);
         printf("Un client se présente\n");
-
-        // Générer un nombre de places aléatoire à acheter
-        const int nb_places_a_acheter = (rand() % 7) + 1;
-        while (entree_client(mem, semid, nb_places_a_acheter) == false) {
-            sleep(delais);
+        while (entree_client(mem, semid) == false) {
+            sleep(1);
         }
     }
 
-    return (0);
+    return(0);
 }

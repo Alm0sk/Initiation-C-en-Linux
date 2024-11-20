@@ -8,7 +8,7 @@
 void attente_aleatoire(unsigned int delais) {
 
 /* Initialisation du désordre */
-srandom(time(NULL) % delais);
+    srand(time(NULL) ^ getpid());
 
 /* Attente */
 sleep((unsigned int)(random() % ATTENTE_MAX));

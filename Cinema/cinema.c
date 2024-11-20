@@ -17,20 +17,15 @@ extern int creer_segment_memoire();
 int main(int argc, char *argv[])
 {
     pid_t pid_entree; /* no du processus du processus entree  */
-    pid_t pid_sortie; /* no du processus du processus sortie */
+    /* no du processus du processus sortie */
 
     // Les variables qui seront utilisés pour stocker les valeurs des arguments
 
     int code_retour_fin_entree;
     int code_retour_fin_sortie;
 
-    int nombre_de_guichets;
-    char * nombre_de_guichets_str;
-
-    char * titre_du_film;
-
-    int nombre_places_cinema; /* Pour écriture dans la shm */
-    char * nombre_places_cinema_str; /* Pour conversion du semid (int) en chaine */
+    /* Pour écriture dans la shm */
+    /* Pour conversion du semid (int) en chaine */
 
     int shmid; /* Id du segment de mémoire partagé */
     int semid; /* Id du sémaphore */
@@ -49,8 +44,13 @@ int main(int argc, char *argv[])
 
     // Attribution des valeurs aux arguments
 
-    nombre_places_cinema_str=argv[1];
-    nombre_places_cinema=atoi(nombre_places_cinema_str);
+    char *nombre_de_guichets_str = argv[1];
+    const int nombre_de_guichets = atoi(nombre_de_guichets_str);
+
+    char *titre_du_film = argv[2];
+
+    char *nombre_places_cinema_str = argv[3];
+    int nombre_places_cinema = atoi(nombre_places_cinema_str);
 
     /* Avant de créer les fils :
     * - on crée le semaphore
@@ -68,48 +68,52 @@ int main(int argc, char *argv[])
     /* Attachement du segment de mémoire partagée */
     mem=attacher_segment_memoire(mem, &shmid);
 
-    /* Pas besoin de sémaphore on est seul :-) */
+    /* Mémoire partagé pour le nombre de places de cinéma partagées par les guichets */
     *mem=nombre_places_cinema;
 
     /* Conversion des shmid et semid  (int) en chaine pour appel programme externe */
     sprintf(shmid_str, "%d", shmid);
     sprintf(semid_str, "%d", semid);
 
-    /* création du fils entree */
-    pid_entree = fork();
+    // Création des processus fils (les guichets)
+    for (int i = 0; i < nombre_de_guichets; i++) {
+        const pid_t pid_guichet = fork(); // Création du fils guichet
 
-    if (pid_entree == -1) {
-        /* Erreur */
-        perror("pb fork sur création entree");
-        return(1);
-    }
-
-    if (pid_entree == 0) {
-        execl("entree", "entree", shmid_str, semid_str, NULL);
-    }
-
-    if (pid_entree >0) {
-        /* processus père */
-
-        /* création du fils sortie */
-        pid_sortie = fork();
-
-        if (pid_sortie == -1) {
+        if (pid_guichet == -1) {
             /* Erreur */
-            perror("pb fork sur création sortie");
+            perror("pb fork sur création guichet");
             return(1);
         }
 
-        if (pid_sortie == 0) {
-             execl("sortie", "sortie", shmid_str, semid_str, nombre_places_cinema_str, NULL);
+        if (pid_guichet == 0) {
+            /* le processus fils */
+            execl("entree", "entree", shmid_str, semid_str, nombre_de_guichets_str, titre_du_film, NULL);
         }
 
-        /* processus père */
+        if (pid_guichet > 0) { // Pas de processus sortie dans cette configuration
+            /* le processus père */
 
-        printf("Père, on attend 1000s \n");
-        sleep(1000);
+            /* création du fils sortie */
+            /*const pid_t pid_sortie = fork();
 
-        printf("P: processus père fin\n");
-        return(0);
+            if (pid_sortie == -1) {
+                /* Erreur #1#
+                perror("pb fork sur création sortie");
+                return(1);
+            }
+
+            if (pid_sortie == 0) {
+                execl("sortie", "sortie", shmid_str, semid_str, nombre_places_cinema_str, NULL);
+            }
+
+            /* processus père #1#
+
+            printf("Père, on attend 1000s \n");
+            sleep(1000);
+
+            printf("P: processus père fin\n");
+            return(0);
+            */
+        }
     }
 }
