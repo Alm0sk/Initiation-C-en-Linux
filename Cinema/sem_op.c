@@ -42,7 +42,7 @@ if ((*semid = semget(cle, 1, IPC_CREAT | IPC_EXCL | 0600)) == -1)
 {
 	if (errno == EEXIST)
   {
-		/* Sémaphoore déjà créé on ne fait qu'obtenir le semid */
+		/* Sémapore déjà créé on ne fait qu'obtenir le semid */
 		if ((*semid=semget(CLE_SEM, 0, 0600)) == -1)
     {
 	    perror("déja à créé mais semget");

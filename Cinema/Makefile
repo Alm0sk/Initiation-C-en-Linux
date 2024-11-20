@@ -9,8 +9,8 @@ CFLAGS = -g #-Wall
 
 all: cinema entree sortie
 
-cinema: $(LINKOBJ) shm_const.h parking.c
-	$(CC) parking.c $(LINKOBJ) -o parking $(CFLAGS)
+cinema: $(LINKOBJ) shm_const.h cinema.c
+	$(CC) cinema.c $(LINKOBJ) -o cinema $(CFLAGS)
 
 sortie: $(LINKOBJ) shm_const.h sortie.c
 	$(CC) sortie.c $(LINKOBJ) -o sortie $(CFLAGS)
@@ -27,5 +27,9 @@ sem_op.o: sem_op.c shm_const.h
 aleatoire.o: aleatoire.c
 	$(CC) -c aleatoire.c $(CFLAGS)
 
+clean_ipc:
+	./clean_ipc.sh && echo "Nettoyage IPC effectué"
+
 clean:
-	rm -f $(OBJ) $(BIN)
+	rm -f $(OBJ) $(BIN) && ./clean_ipc.sh && echo "Nettoyage effectué"
+
