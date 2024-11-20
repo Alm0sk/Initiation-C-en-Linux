@@ -56,3 +56,9 @@ dkms.conf
 
 # Parking exemple
 Cinema/parking
+
+# Cinema build
+Cinema/cinema
+Cinema/entree
+Cinema/sortie
+

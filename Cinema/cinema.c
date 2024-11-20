@@ -6,6 +6,8 @@
 
 #include "shm_const.h"
 
+
+
 extern int creer_initialiser_semaphore();
 extern int * attacher_segment_memoire();
 extern int P();
@@ -17,8 +19,15 @@ int main(int argc, char *argv[])
     pid_t pid_entree; /* no du processus du processus entree  */
     pid_t pid_sortie; /* no du processus du processus sortie */
 
+    // Les variables qui seront utilisés pour stocker les valeurs des arguments
+
     int code_retour_fin_entree;
     int code_retour_fin_sortie;
+
+    int nombre_de_guichets;
+    char * nombre_de_guichets_str;
+
+    char * titre_du_film;
 
     int nombre_places_cinema; /* Pour écriture dans la shm */
     char * nombre_places_cinema_str; /* Pour conversion du semid (int) en chaine */
@@ -33,10 +42,12 @@ int main(int argc, char *argv[])
 
     char param_gnome_terminal[80];
 
-    if ( argc != 2 ) {
-        fprintf(stderr, "Usage : %s nombre_places\n", argv[0]);
+    if ( argc != 4 ) {
+        fprintf(stderr, "Usage : %s nombre_de_guichets titre_du_film nombre_places\n", argv[0]);
         return(3);
     }
+
+    // Attribution des valeurs aux arguments
 
     nombre_places_cinema_str=argv[1];
     nombre_places_cinema=atoi(nombre_places_cinema_str);

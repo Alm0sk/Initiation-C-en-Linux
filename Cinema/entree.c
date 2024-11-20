@@ -19,7 +19,7 @@ extern int V();
 */
 /******************************************************************************/
 
-bool entree_voiture(int *mem, int semid) {                                       
+bool entree_client(int *mem, int semid) {
 bool place_attribuee=false;
 
 /* On protège l'accès à la shm */
@@ -67,8 +67,8 @@ mem=attacher_segment_memoire(mem, &shmid);
 
 while (1) {
   attente_aleatoire(delais);
-  printf("Une voiture se présente\n");
-  while (entree_voiture(mem, semid) == false) {
+  printf("Un client se présente\n");
+  while (entree_client(mem, semid) == false) {
     sleep(1);  
   }
 }

@@ -28,8 +28,8 @@ aleatoire.o: aleatoire.c
 	$(CC) -c aleatoire.c $(CFLAGS)
 
 clean_ipc:
-	./clean_ipc.sh && echo "Nettoyage IPC effectué"
+	./clean_ipc.sh
 
 clean:
-	rm -f $(OBJ) $(BIN) && ./clean_ipc.sh && echo "Nettoyage effectué"
+	rm -f $(OBJ) $(BIN) && ./clean_ipc.sh
 
