@@ -89,31 +89,29 @@ int main(int argc, char *argv[])
             /* le processus fils */
             execl("entree", "entree", shmid_str, semid_str, nombre_de_guichets_str, titre_du_film, NULL);
         }
-
-        if (pid_guichet > 0) { // Pas de processus sortie dans cette configuration
-            /* le processus père */
-
-            /* création du fils sortie */
-            /*const pid_t pid_sortie = fork();
-
-            if (pid_sortie == -1) {
-                /* Erreur #1#
-                perror("pb fork sur création sortie");
-                return(1);
-            }
-
-            if (pid_sortie == 0) {
-                execl("sortie", "sortie", shmid_str, semid_str, nombre_places_cinema_str, NULL);
-            }
-
-            /* processus père #1#
-
-            printf("Père, on attend 1000s \n");
-            sleep(1000);
-
-            printf("P: processus père fin\n");
-            return(0);
-            */
-        }
     }
+    // Création du processus afficheur
+    const pid_t pid_afficheur = fork();
+
+    if (pid_afficheur == -1) {
+        /* Erreur */
+        perror("pb fork sur création afficheur");
+        return(1);
+    }
+
+    if (pid_afficheur == 0) {
+        /* le processus fils */
+        execl("afficheur", "afficheur", shmid_str, semid_str, NULL);
+    }
+
+    // Attendre la fin des processus guichets
+    for (int i = 0; i < nombre_de_guichets; i++) {
+        wait(NULL);
+    }
+
+    // Attendre la fin du processus afficheur
+    wait(NULL);
+
+    printf("P: processus père fin\n");
+    return(0);
 }

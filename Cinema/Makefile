@@ -4,10 +4,10 @@
 
 OBJ  = sem_op.o shm_op.o aleatoire.o
 LINKOBJ  = $(OBJ)
-BIN  = cinema entree
+BIN  = cinema entree afficheur
 CFLAGS = -g #-Wall
 
-all: cinema entree
+all: cinema entree afficheur
 
 cinema: $(LINKOBJ) shm_const.h cinema.c
 	$(CC) cinema.c $(LINKOBJ) -o cinema $(CFLAGS)
