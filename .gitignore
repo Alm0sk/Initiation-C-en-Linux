@@ -50,3 +50,15 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# JetBrains IDE
+.idea/
+
+# Parking exemple
+Cinema/parking
+
+# Cinema build
+Cinema/cinema
+Cinema/entree
+Cinema/sortie
+
