@@ -1,12 +1,14 @@
 # Initiation-C-en-Linux
 
-Code fourni dans le cadre du module de C en Linux de Mr Malinge à IPI Lyon
+Code fourni dans le cadre du module de C en Linux de Mr Malinge à IPI Lyon. <br><br>
+Cette page contient les exercices réalisés en cours, le tp noté est sur une page dédiée.
 
 ### Sommaire
 
 - [Exercice 1](#exercice-1)
 - [Exercice 2](#exercice-2)
 - [Pere_Fils_With_Arg](#pere_fils_with_arg)
+- [TP Noté: Cinema](Cinema)
 
 <hr>
 

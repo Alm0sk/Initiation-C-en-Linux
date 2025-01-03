@@ -27,7 +27,7 @@ extern int V();
 /******************************************************************************/
 int main(int argc, char *argv[]) {
 
-    unsigned int delais = 5;
+    unsigned int delais = 3;
 
     int shmid = atoi(argv[1]);
     int semid = atoi(argv[2]);
@@ -50,6 +50,13 @@ int main(int argc, char *argv[]) {
 
         /* On libère l'accès à la shm */
         V(semid);
+
+        /* Si plus de place, l'afficheur ferme */
+        if (*mem <= 0)
+        {
+            printf("Afficheur %d : Plus de place, je me ferme.\n", getpid());
+            exit(0);
+        }
 
         /* Attente de 5 secondes */
         sleep(delais);
